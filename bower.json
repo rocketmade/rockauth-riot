@@ -1,0 +1,21 @@
+{
+  "name": "rockauth-riot",
+  "homepage": "https://github.com/rocketmade/rockauth-riot",
+  "authors": [
+    "Daniel Gubler <danielcgubler@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "rocket.js": "*"
+  }
+}
