@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "rocket.js": "*"
+    "rocket.js": "*",
+    "material-design-lite": "~1.0.6"
   }
 }
