@@ -1,6 +1,9 @@
 {
   "name": "rockauth-riot",
   "homepage": "https://github.com/rocketmade/rockauth-riot",
+  "authors": [
+    "Daniel Gubler <danielcgubler@gmail.com>"
+  ],
   "description": "",
   "main": "",
   "moduleType": [],

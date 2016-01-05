@@ -1,0 +1,33 @@
+{
+  "name": "rockauth-riot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "rockauth.js",
+  "dependencies": {},
+  "devDependencies": {
+    "coffee-script": "^1.10.0",
+    "express": "^4.13.3",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-riot": "^0.4.3",
+    "gulp-shell": "^0.5.1",
+    "gulp-uglify": "^1.5.1",
+    "jade": "^1.11.0",
+    "jstransformer-coffee-script": "^1.0.0",
+    "jstransformer-stylus": "^1.0.0",
+    "stylus": "^0.53.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rocketmade/rockauth-riot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rocketmade/rockauth-riot/issues"
+  },
+  "homepage": "https://github.com/rocketmade/rockauth-riot#readme"
+}
