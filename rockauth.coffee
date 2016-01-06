@@ -16,7 +16,7 @@ class @rockauth
     @secret.value = value if value
     @secret.value
 
-  @authenticate: (opts = {}) ->
+  @authenticate_with_password: (opts = {}) ->
     new Promise (resolve, reject) =>
       rocketmade.http.post "#{@url()}/authentications.json",
         authentication:

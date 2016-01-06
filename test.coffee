@@ -40,9 +40,9 @@ tape.onFinish ->
   @test ->
     @end()
 
-@ui "rockauth.authenticate(opts) [pass]", (test) ->
+@ui "rockauth.authenticate_with_password(opts) [pass]", (test) ->
   @evaluate (callback) ->
-    rockauth.authenticate
+    rockauth.authenticate_with_password
       email: "mitch@rocketmade.com"
       password: "password"
     .then (data) ->
@@ -57,9 +57,9 @@ tape.onFinish ->
     test.equal user.last_name, "Thompson", 'user last name correct'
     test.end()
 
-@ui "rockauth.authenticate(opts) [fail no email]", (test) ->
+@ui "rockauth.authenticate_with_password(opts) [fail no email]", (test) ->
   @evaluate (callback) ->
-    rockauth.authenticate
+    rockauth.authenticate_with_password
       email: "bad@rocketmade.com"
       password: "password"
     .catch (error) ->
@@ -68,9 +68,9 @@ tape.onFinish ->
     test.equal errors.email, "We don't recognize this email.", 'email error message'
     test.end()
 
-@ui "rockauth.authenticate(opts) [fail wrong password]", (test) ->
+@ui "rockauth.authenticate_with_password(opts) [fail wrong password]", (test) ->
   @evaluate (callback) ->
-    rockauth.authenticate
+    rockauth.authenticate_with_password
       email: "mitch@rocketmade.com"
       password: "bad"
     .catch (error) ->

@@ -55,9 +55,9 @@
     });
   });
 
-  this.ui("rockauth.authenticate(opts) [pass]", function(test) {
+  this.ui("rockauth.authenticate_with_password(opts) [pass]", function(test) {
     return this.evaluate(function(callback) {
-      return rockauth.authenticate({
+      return rockauth.authenticate_with_password({
         email: "mitch@rocketmade.com",
         password: "password"
       }).then(function(data) {
@@ -76,9 +76,9 @@
     });
   });
 
-  this.ui("rockauth.authenticate(opts) [fail no email]", function(test) {
+  this.ui("rockauth.authenticate_with_password(opts) [fail no email]", function(test) {
     return this.evaluate(function(callback) {
-      return rockauth.authenticate({
+      return rockauth.authenticate_with_password({
         email: "bad@rocketmade.com",
         password: "password"
       })["catch"](function(error) {
@@ -90,9 +90,9 @@
     });
   });
 
-  this.ui("rockauth.authenticate(opts) [fail wrong password]", function(test) {
+  this.ui("rockauth.authenticate_with_password(opts) [fail wrong password]", function(test) {
     return this.evaluate(function(callback) {
-      return rockauth.authenticate({
+      return rockauth.authenticate_with_password({
         email: "mitch@rocketmade.com",
         password: "bad"
       })["catch"](function(error) {

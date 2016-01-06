@@ -7,9 +7,9 @@ rockauth-login
       @name = @opts.name or "rockauth:login"
       
       rocketmade.on "#{@name}:submit", (data) =>
-        rockauth.authenticate data
-        .then (json) => rockauth.trigger "#{@name}:pass", json
-        .catch (json) => rockauth.trigger "#{@name}:fail", json
+        rockauth.authenticate_with_password data
+          .then (json) => rockauth.trigger "#{@name}:pass", json
+          .catch (json) => rockauth.trigger "#{@name}:fail", json
     
       rockauth.on "#{@name}:fail", (errors) =>
         rocketmade.trigger "#{@name}:errors", errors
