@@ -3,19 +3,27 @@
   "version": "1.0.0",
   "description": "",
   "main": "rockauth.js",
-  "dependencies": {},
+  "author": "Mitchel Thompson <mitch@rocketmade.com>",
+  "license": "ISC",
   "devDependencies": {
     "coffee-script": "^1.10.0",
     "express": "^4.13.3",
     "gulp": "^3.9.0",
+    "gulp-coffee": "^2.3.1",
     "gulp-concat": "^2.6.0",
+    "gulp-if": "^2.0.0",
     "gulp-riot": "^0.4.3",
     "gulp-shell": "^0.5.1",
+    "gulp-tape": "0.0.7",
     "gulp-uglify": "^1.5.1",
     "jade": "^1.11.0",
+    "joseph": "^0.2.9",
     "jstransformer-coffee-script": "^1.0.0",
     "jstransformer-stylus": "^1.0.0",
-    "stylus": "^0.53.0"
+    "nightmare": "^2.1.2",
+    "stylus": "^0.53.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.4.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,8 +32,6 @@
     "type": "git",
     "url": "git+https://github.com/rocketmade/rockauth-riot.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/rocketmade/rockauth-riot/issues"
   },

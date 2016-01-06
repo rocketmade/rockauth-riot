@@ -1,1 +1,0 @@
-riot.tag2("rockauth-login","<rocket-login></rocket-login>","","",function(t){}),riot.tag2("rockauth-login","<rocket-login></rocket-login>","","",function(t){}),riot.tag2("rocket-auth-test","<rocket-app> <rocket-auth-simple></rocket-auth-simple> </rocket-app>","","",function(t){});

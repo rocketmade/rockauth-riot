@@ -2,6 +2,7 @@
   "name": "rockauth-riot",
   "homepage": "https://github.com/rocketmade/rockauth-riot",
   "authors": [
+    "Mitchel Thompson <mitch@rocketmade.com>",
     "Daniel Gubler <danielcgubler@gmail.com>"
   ],
   "description": "",
@@ -9,11 +10,8 @@
   "moduleType": [],
   "license": "MIT",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "**/*",
+    "!/rockauth.js"
   ],
   "dependencies": {
     "rocketmade.js": "*"
