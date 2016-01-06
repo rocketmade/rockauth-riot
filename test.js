@@ -48,6 +48,93 @@
     return this.goto("http://localhost:3010" + path);
   });
 
+  this.ui("rockauth.url(value)", function() {
+    this.to('/');
+    this.evaluate(function() {
+      rockauth.url('http://url');
+      return rockauth.url();
+    });
+    return this.test(function(value) {
+      this.equal(value, 'http://url', 'set / get value');
+      return this.end();
+    });
+  });
+
+  this.ui("rockauth.id(value)", function() {
+    this.to('/');
+    this.evaluate(function() {
+      rockauth.id('identifier');
+      return rockauth.id();
+    });
+    return this.test(function(value) {
+      this.equal(value, 'identifier', 'set / get value');
+      return this.end();
+    });
+  });
+
+  this.ui("rockauth.secret(value)", function() {
+    this.to('/');
+    this.evaluate(function() {
+      rockauth.secret('secret');
+      return rockauth.secret();
+    });
+    return this.test(function(value) {
+      this.equal(value, 'secret', 'set / get value');
+      return this.end();
+    });
+  });
+
+  this.ui("rockauth.user(value)", function() {
+    this.to('/');
+    this.evaluate(function() {
+      rockauth.user({
+        id: 1,
+        email: "mitch@rocketmade.com"
+      });
+      return rockauth.user();
+    });
+    return this.test(function(value) {
+      this.deepLooseEqual(value, {
+        id: 1,
+        email: "mitch@rocketmade.com"
+      }, 'set / get value');
+      return this.end();
+    });
+  });
+
+  this.ui("rockauth.token(value)", function() {
+    this.to('/');
+    this.evaluate(function() {
+      rockauth.token('token');
+      return rockauth.token();
+    });
+    return this.test(function(value) {
+      this.equal(value, 'token', 'set / get value');
+      return this.end();
+    });
+  });
+
+  this.ui("rockauth.session(value)", function() {
+    this.to('/');
+    this.evaluate(function() {
+      rockauth.session(JSON.parse('{\"id\":5,\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk\",\"token_id\":\"sWq17TyDKh99NrRuq4MvPyT/HRh31lBR\",\"expiration\":1483650310,\"client_version\":null,\"device_identifier\":null,\"device_os\":null,\"device_os_version\":null,\"device_description\":null,\"user\":{\"id\":1,\"email\":\"mitch@rocketmade.com\",\"first_name\":\"Mitch\",\"last_name\":\"Thompson\",\"provider_authentications\":[]},\"provider_authentication\":null}'));
+      return {
+        session: rockauth.session(),
+        user: rockauth.user(),
+        token: rockauth.token()
+      };
+    });
+    return this.test(function(object) {
+      this.equal(object.session.id, 5, 'sets session id');
+      this.equal(object.session.token_id, 'sWq17TyDKh99NrRuq4MvPyT/HRh31lBR', 'sets session token id');
+      this.equal(object.session.expiration, 1483650310, 'sets session token id');
+      this.equal(object.user.id, 1, 'sets user id');
+      this.equal(object.user.email, 'mitch@rocketmade.com', 'sets user email');
+      this.equal(object.token, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk", "sets token");
+      return this.end();
+    });
+  });
+
   this.ui("setup", function() {
     this.to();
     return this.test(function() {

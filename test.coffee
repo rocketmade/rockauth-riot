@@ -35,6 +35,65 @@ tape.onFinish ->
 
 # ROCKAUTH
 
+@ui "rockauth.url(value)", ->
+  @to '/'
+  @evaluate ->
+    rockauth.url 'http://url'
+    rockauth.url()
+  @test (value) ->
+    @equal value, 'http://url', 'set / get value'
+    @end()
+
+@ui "rockauth.id(value)", ->
+  @to '/'
+  @evaluate ->
+    rockauth.id 'identifier'
+    rockauth.id()
+  @test (value) ->
+    @equal value, 'identifier', 'set / get value'
+    @end()
+
+@ui "rockauth.secret(value)", ->
+  @to '/'
+  @evaluate ->
+    rockauth.secret 'secret'
+    rockauth.secret()
+  @test (value) ->
+    @equal value, 'secret', 'set / get value'
+    @end()
+
+@ui "rockauth.user(value)", ->
+  @to '/'
+  @evaluate ->
+    rockauth.user id: 1, email: "mitch@rocketmade.com"
+    rockauth.user()
+  @test (value) ->
+    @deepLooseEqual value, id: 1, email: "mitch@rocketmade.com", 'set / get value'
+    @end()
+
+@ui "rockauth.token(value)", ->
+  @to '/'
+  @evaluate ->
+    rockauth.token 'token'
+    rockauth.token()
+  @test (value) ->
+    @equal value, 'token', 'set / get value'
+    @end()
+
+@ui "rockauth.session(value)", ->
+  @to '/'
+  @evaluate ->
+    rockauth.session JSON.parse '{\"id\":5,\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk\",\"token_id\":\"sWq17TyDKh99NrRuq4MvPyT/HRh31lBR\",\"expiration\":1483650310,\"client_version\":null,\"device_identifier\":null,\"device_os\":null,\"device_os_version\":null,\"device_description\":null,\"user\":{\"id\":1,\"email\":\"mitch@rocketmade.com\",\"first_name\":\"Mitch\",\"last_name\":\"Thompson\",\"provider_authentications\":[]},\"provider_authentication\":null}'
+    session: rockauth.session(), user: rockauth.user(), token: rockauth.token()
+  @test (object) ->
+    @equal object.session.id, 5, 'sets session id'
+    @equal object.session.token_id, 'sWq17TyDKh99NrRuq4MvPyT/HRh31lBR', 'sets session token id'
+    @equal object.session.expiration, 1483650310, 'sets session token id'
+    @equal object.user.id, 1, 'sets user id'
+    @equal object.user.email, 'mitch@rocketmade.com', 'sets user email'
+    @equal object.token, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk", "sets token"
+    @end()
+
 @ui "setup", ->
   @to()
   @test ->
