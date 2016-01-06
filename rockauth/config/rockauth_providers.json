@@ -1,0 +1,54 @@
+{
+  "development": {
+    "twitter": {
+      "consumer_key": "",
+      "consumer_secret": ""
+    },
+    "instagram": {
+      "client_id": "",
+      "client_secret": ""
+    },
+    "google_plus": {
+      "api_key": ""
+    }
+  },
+  "qa": {
+    "twitter": {
+      "consumer_key": "3A3MWnTDSPKY3u22PAIbBlTB6",
+      "consumer_secret": "BwRK5iYqI8Mz0aCBwHIYbm7c1vd5fFr24tRPT40BGitjgWliDX"
+    },
+    "instagram": {
+      "client_id": "64fcec2af1c84527b3546f5f8b63d1bf",
+      "client_secret": "9ae7eb809483404eb9db3dd5693c3184"
+    },
+    "google_plus": {
+      "api_key": ""
+    }
+  },
+  "staging": {
+    "twitter": {
+      "consumer_key": "",
+      "consumer_secret": ""
+    },
+    "instagram": {
+      "client_id": "",
+      "client_secret": ""
+    },
+    "google_plus": {
+      "api_key": ""
+    }
+  },
+  "production": {
+    "twitter": {
+      "consumer_key": "",
+      "consumer_secret": ""
+    },
+    "instagram": {
+      "client_id": "",
+      "client_secret": ""
+    },
+    "google_plus": {
+      "api_key": ""
+    }
+  }
+}
