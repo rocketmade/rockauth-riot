@@ -43,12 +43,4 @@ class @rockauth
       .then (json) ->
         resolve json.authentication
       .catch (json) ->
-        object = {}
-        error = json.error
-        errors = error.validation_errors
-        switch
-          when errors.resource_owner
-            object.email = "We don't recognize this email."
-          when errors.password
-            object.password = "Password is incorrect."
-        reject object
+        reject email: "Invalid credentials."

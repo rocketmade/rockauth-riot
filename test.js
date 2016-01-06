@@ -172,7 +172,9 @@
         return callback(error);
       });
     }).then(null, function(errors) {
-      test.equal(errors.email, "We don't recognize this email.", 'email error message');
+      test.deepLooseEqual(errors, {
+        email: "Invalid credentials."
+      }, 'password error message');
       return test.end();
     });
   });
@@ -186,7 +188,9 @@
         return callback(error);
       });
     }).then(null, function(errors) {
-      test.equal(errors.password, "Password is incorrect.", 'password error message');
+      test.deepLooseEqual(errors, {
+        email: "Invalid credentials."
+      }, 'password error message');
       return test.end();
     });
   });

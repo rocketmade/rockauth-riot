@@ -124,7 +124,7 @@ tape.onFinish ->
     .catch (error) ->
       callback error
   .then null, (errors) ->
-    test.equal errors.email, "We don't recognize this email.", 'email error message'
+    test.deepLooseEqual errors, email: "Invalid credentials.", 'password error message'
     test.end()
 
 @ui "rockauth.authenticate_with_password(opts) [fail wrong password]", (test) ->
@@ -135,5 +135,5 @@ tape.onFinish ->
     .catch (error) ->
       callback error
   .then null, (errors) ->
-    test.equal errors.password, "Password is incorrect.", 'password error message'
+    test.deepLooseEqual errors, email: "Invalid credentials.", 'password error message'
     test.end()
