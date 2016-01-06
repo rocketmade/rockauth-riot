@@ -2,6 +2,8 @@
 
 class @rockauth
 
+  riot.observable @
+
   @url: (value) ->
     @url.value = value.replace(/\/$/, '') if value
     @url.value

@@ -8,10 +8,10 @@ rockauth-login
       
       rocketmade.on "#{@name}:submit", (data) =>
         rockauth.authenticate data
-        .then  (json) => rocketmade.trigger "#{@name}:pass", json
-        .catch (json) => rocketmade.trigger "#{@name}:fail", json
+        .then (json) => rockauth.trigger "#{@name}:pass", json
+        .catch (json) => rockauth.trigger "#{@name}:fail", json
     
-      rocketmade.on "#{@name}:fail", (errors) =>
+      rockauth.on "#{@name}:fail", (errors) =>
         rocketmade.trigger "#{@name}:errors", errors
 
   //- HTML
