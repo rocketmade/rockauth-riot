@@ -10,5 +10,5 @@ rockauth-test
   
   //- HTML
 
-  rocket-app
+  rocketmade-app
     rockauth-login

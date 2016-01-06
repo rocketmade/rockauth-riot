@@ -26,7 +26,7 @@ gulp.task 'reload', ['rockauth.js'], ->
 # WATCH
 
 gulp.task 'watch', ->
-  gulp.watch ['tags/*', 'client.coffee', 'test.coffee'], ['reload']
+  gulp.watch ['tags/*', 'rockauth.coffee', 'test.coffee'], ['reload']
 
 # ROCKAUTH MOCK
 
@@ -58,7 +58,7 @@ gulp.task 'test.js', ->
 # ROCKAUTH.JS
 
 gulp.task 'rockauth.js', ['mock:reset'], ->
-  gulp.src(['client.coffee', 'tags/*'])
+  gulp.src(['rockauth.coffee', 'tags/*'])
     .pipe(gulpif(/\.coffee$/, coffee()))
     .pipe(gulpif(/\.tag$/, riot(template: 'jade')))
     .pipe(concat("rockauth.js"))

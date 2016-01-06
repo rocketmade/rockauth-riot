@@ -16,7 +16,7 @@ class @rockauth
 
   @authenticate: (opts = {}) ->
     new Promise (resolve, reject) =>
-      rocket.http.post "#{@url()}/authentications.json",
+      rocketmade.http.post "#{@url()}/authentications.json",
         authentication:
           auth_type: 'password'
           client_id: @id()

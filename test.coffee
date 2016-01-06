@@ -33,7 +33,7 @@ tape.onFinish ->
 @helper 'to', (path = '') ->
   @goto "http://localhost:3010#{path}"
 
-# ROCKET.MODEL
+# ROCKAUTH
 
 @ui "setup", ->
   @to()
