@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "rockauth.js",
+  "author": "Mitchel Thompson <mitch@rocketmade.com>",
+  "license": "ISC",
   "devDependencies": {
     "coffee-script": "^1.10.0",
     "express": "^4.13.3",
@@ -30,8 +32,6 @@
     "type": "git",
     "url": "git+https://github.com/rocketmade/rockauth-riot.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/rocketmade/rockauth-riot/issues"
   },
