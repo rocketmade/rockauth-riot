@@ -8,13 +8,13 @@ class @rockauth
     @url.value = value.replace(/\/$/, '') if value
     @url.value
 
-  @id: (value) ->
-    @id.value = value if value
-    @id.value
+  @client_id: (value) ->
+    @client_id.value = value if value
+    @client_id.value
 
-  @secret: (value) ->
-    @secret.value = value if value
-    @secret.value
+  @client_secret: (value) ->
+    @client_secret.value = value if value
+    @client_secret.value
 
   @token: (value) ->
     @token.value = value if value
@@ -36,8 +36,8 @@ class @rockauth
       rocketmade.http.post "#{@url()}/authentications.json",
         authentication:
           auth_type: 'password'
-          client_id: @id()
-          client_secret: @secret()
+          client_id: @client_id()
+          client_secret: @client_secret()
           username: opts.email
           password: opts.password
       .then (json) ->
