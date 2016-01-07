@@ -4,32 +4,39 @@ class @rockauth
 
   riot.observable @
 
+  @data: rocketmade.data
+
   @url: (value) ->
-    @url.value = value.replace(/\/$/, '') if value
-    @url.value
+    if value
+      @data.set 'rockauth:url', value.replace(/\/$/, '')
+    @data.get 'rockauth:url'
 
   @id: (value) ->
-    @id.value = value if value
-    @id.value
+    if value
+      @data.set 'rockauth:id', value
+    @data.get 'rockauth:id'
 
   @secret: (value) ->
-    @secret.value = value if value
-    @secret.value
+    if value
+      @data.set 'rockauth:secret', value
+    @data.get 'rockauth:secret'
 
   @token: (value) ->
-    @token.value = value if value
-    @token.value
+    if value
+      @data.set 'rockauth:token', value
+    @data.get 'rockauth:token'
 
   @user: (value) ->
-    @user.value = value if value
-    @user.value
+    if value
+      @data.set 'rockauth:user', value
+    @data.get 'rockauth:user'
 
   @session: (value) ->
     if value
       @user value.user
       @token value.token
-      @session.value = value
-    @session.value
+      @data.set 'rockauth:session', value
+    @data.get 'rockauth:session'
 
   @authenticate_with_password: (opts = {}) ->
     new Promise (resolve, reject) =>
