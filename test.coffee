@@ -44,20 +44,20 @@ tape.onFinish ->
     @equal value, 'http://url', 'set / get value'
     @end()
 
-@ui "rockauth.id(value)", ->
+@ui "rockauth.client_id(value)", ->
   @to '/'
   @evaluate ->
-    rockauth.id 'identifier'
-    rockauth.id()
+    rockauth.client_id 'identifier'
+    rockauth.client_id()
   @test (value) ->
     @equal value, 'identifier', 'set / get value'
     @end()
 
-@ui "rockauth.secret(value)", ->
+@ui "rockauth.client_secret(value)", ->
   @to '/'
   @evaluate ->
-    rockauth.secret 'secret'
-    rockauth.secret()
+    rockauth.client_secret 'secret'
+    rockauth.client_secret()
   @test (value) ->
     @equal value, 'secret', 'set / get value'
     @end()
