@@ -40,7 +40,7 @@ class @rockauth
 
   @authenticate_with_password: (opts = {}) ->
     new Promise (resolve, reject) =>
-      rocketmade.http.post "#{@url()}/authentications.json",
+      rocketmade.http.post "#{@url()}/authentications",
         authentication:
           auth_type: 'password'
           client_id: @client_id()
