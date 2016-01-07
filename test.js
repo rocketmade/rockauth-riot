@@ -60,11 +60,11 @@
     });
   });
 
-  this.ui("rockauth.id(value)", function() {
+  this.ui("rockauth.client_id(value)", function() {
     this.to('/');
     this.evaluate(function() {
-      rockauth.id('identifier');
-      return rockauth.id();
+      rockauth.client_id('identifier');
+      return rockauth.client_id();
     });
     return this.test(function(value) {
       this.equal(value, 'identifier', 'set / get value');
@@ -72,11 +72,11 @@
     });
   });
 
-  this.ui("rockauth.secret(value)", function() {
+  this.ui("rockauth.client_secret(value)", function() {
     this.to('/');
     this.evaluate(function() {
-      rockauth.secret('secret');
-      return rockauth.secret();
+      rockauth.client_secret('secret');
+      return rockauth.client_secret();
     });
     return this.test(function(value) {
       this.equal(value, 'secret', 'set / get value');

@@ -11,15 +11,15 @@ class @rockauth
       @data.set 'rockauth:url', value.replace(/\/$/, '')
     @data.get 'rockauth:url'
 
-  @id: (value) ->
+  @client_id: (value) ->
     if value
-      @data.set 'rockauth:id', value
-    @data.get 'rockauth:id'
+      @data.set 'rockauth:client_id', value
+    @data.get 'rockauth:client_id'
 
-  @secret: (value) ->
+  @client_secret: (value) ->
     if value
-      @data.set 'rockauth:secret', value
-    @data.get 'rockauth:secret'
+      @data.set 'rockauth:client_secret', value
+    @data.get 'rockauth:client_secret'
 
   @token: (value) ->
     if value
@@ -43,8 +43,8 @@ class @rockauth
       rocketmade.http.post "#{@url()}/authentications.json",
         authentication:
           auth_type: 'password'
-          client_id: @id()
-          client_secret: @secret()
+          client_id: @client_id()
+          client_secret: @client_secret()
           username: opts.email
           password: opts.password
       .then (json) ->
