@@ -97,6 +97,25 @@
     });
   });
 
+  this.test('rockauth.authentication(json)', function() {
+    this.evaluate(function(json) {
+      rockauth.authentication(json);
+      return {
+        session: rockauth.session(),
+        user: rockauth.user(),
+        token: rockauth.token()
+      };
+    }, api.authentications.create.pass);
+    return this.then(function(value) {
+      this.equal(value.session.id, 1, 'sets session id');
+      this.equal(value.session.token_id, 'KUXCWYC3n5BdzgOVHwQnKMz7rI23QIbP', 'sets session token id');
+      this.equal(value.user.id, 1, 'sets user id');
+      this.equal(value.user.email, 'mitch@rocketmade.com', 'sets user email');
+      this.equal(value.token, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIyNDAyMTIsImV4cCI6MTQ4Mzc3NjIxMiwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoiS1VYQ1dZQzNuNUJkemdPVkh3UW5LTXo3ckkyM1FJYlAifQ.rlq9gDcnz3ixmo3yYx05zAaIg_pR_ifFn-yvTg-NnnI", "sets token");
+      return this.end();
+    });
+  });
+
   this.test("rockauth.user(value)", function() {
     this.evaluate(function() {
       rockauth.user({
@@ -121,26 +140,6 @@
     });
     return this.then(function(value) {
       this.equal(value, 'token', 'set / get value');
-      return this.end();
-    });
-  });
-
-  this.test("rockauth.session(value)", function() {
-    this.evaluate(function() {
-      rockauth.session(JSON.parse('{\"id\":5,\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk\",\"token_id\":\"sWq17TyDKh99NrRuq4MvPyT/HRh31lBR\",\"expiration\":1483650310,\"client_version\":null,\"device_identifier\":null,\"device_os\":null,\"device_os_version\":null,\"device_description\":null,\"user\":{\"id\":1,\"email\":\"mitch@rocketmade.com\",\"first_name\":\"Mitch\",\"last_name\":\"Thompson\",\"provider_authentications\":[]},\"provider_authentication\":null}'));
-      return {
-        session: rockauth.session(),
-        user: rockauth.user(),
-        token: rockauth.token()
-      };
-    });
-    return this.then(function(object) {
-      this.equal(object.session.id, 5, 'sets session id');
-      this.equal(object.session.token_id, 'sWq17TyDKh99NrRuq4MvPyT/HRh31lBR', 'sets session token id');
-      this.equal(object.session.expiration, 1483650310, 'sets session token id');
-      this.equal(object.user.id, 1, 'sets user id');
-      this.equal(object.user.email, 'mitch@rocketmade.com', 'sets user email');
-      this.equal(object.token, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk", "sets token");
       return this.end();
     });
   });
@@ -172,6 +171,64 @@
     });
     return this["catch"](function(error) {
       this.deepLooseEqual(error, api.authentications.create.fail, 'json response');
+      return this.end();
+    });
+  });
+
+  this.test("rockauth.sideload.load(basic)", function() {
+    this.evaluate(function() {
+      return rockauth.sideload.load({
+        users: [
+          {
+            id: 1,
+            email: "user@email.com"
+          }
+        ]
+      });
+    });
+    return this.then(function(value) {
+      this.deepLooseEqual(value, {
+        users: {
+          1: {
+            id: 1,
+            email: "user@email.com"
+          }
+        }
+      });
+      return this.end();
+    });
+  });
+
+  this.test("rockauth.sideload.load(json)", function() {
+    this.evaluate(function(json) {
+      return rockauth.sideload.load(json);
+    }, api.authentications.create.pass);
+    return this.then(function(value) {
+      this.deepLooseEqual(value, {
+        authentications: {
+          1: {
+            id: 1,
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIyNDAyMTIsImV4cCI6MTQ4Mzc3NjIxMiwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoiS1VYQ1dZQzNuNUJkemdPVkh3UW5LTXo3ckkyM1FJYlAifQ.rlq9gDcnz3ixmo3yYx05zAaIg_pR_ifFn-yvTg-NnnI',
+            token_id: 'KUXCWYC3n5BdzgOVHwQnKMz7rI23QIbP',
+            expiration: 1483776212,
+            client_version: null,
+            device_identifier: null,
+            device_os: null,
+            device_os_version: null,
+            device_description: null,
+            user_id: 1,
+            provider_authentication_id: null
+          }
+        },
+        users: {
+          1: {
+            id: 1,
+            email: 'mitch@rocketmade.com',
+            first_name: 'Mitch',
+            last_name: 'Thompson'
+          }
+        }
+      });
       return this.end();
     });
   });

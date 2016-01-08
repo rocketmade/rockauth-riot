@@ -75,6 +75,19 @@ browser.to()
     @equal value, 'secret', 'set / get value'
     @end()
 
+@test 'rockauth.authentication(json)', ->
+  @evaluate (json) ->
+    rockauth.authentication json
+    session: rockauth.session(), user: rockauth.user(), token: rockauth.token()
+  , api.authentications.create.pass
+  @then (value) ->
+    @equal value.session.id, 1, 'sets session id'
+    @equal value.session.token_id, 'KUXCWYC3n5BdzgOVHwQnKMz7rI23QIbP', 'sets session token id'
+    @equal value.user.id, 1, 'sets user id'
+    @equal value.user.email, 'mitch@rocketmade.com', 'sets user email'
+    @equal value.token, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIyNDAyMTIsImV4cCI6MTQ4Mzc3NjIxMiwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoiS1VYQ1dZQzNuNUJkemdPVkh3UW5LTXo3ckkyM1FJYlAifQ.rlq9gDcnz3ixmo3yYx05zAaIg_pR_ifFn-yvTg-NnnI", "sets token"
+    @end()
+
 @test "rockauth.user(value)", ->
   @evaluate ->
     rockauth.user id: 1, email: "mitch@rocketmade.com"
@@ -91,18 +104,7 @@ browser.to()
     @equal value, 'token', 'set / get value'
     @end()
 
-@test "rockauth.session(value)", ->
-  @evaluate ->
-    rockauth.session JSON.parse '{\"id\":5,\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk\",\"token_id\":\"sWq17TyDKh99NrRuq4MvPyT/HRh31lBR\",\"expiration\":1483650310,\"client_version\":null,\"device_identifier\":null,\"device_os\":null,\"device_os_version\":null,\"device_description\":null,\"user\":{\"id\":1,\"email\":\"mitch@rocketmade.com\",\"first_name\":\"Mitch\",\"last_name\":\"Thompson\",\"provider_authentications\":[]},\"provider_authentication\":null}'
-    session: rockauth.session(), user: rockauth.user(), token: rockauth.token()
-  @then (object) ->
-    @equal object.session.id, 5, 'sets session id'
-    @equal object.session.token_id, 'sWq17TyDKh99NrRuq4MvPyT/HRh31lBR', 'sets session token id'
-    @equal object.session.expiration, 1483650310, 'sets session token id'
-    @equal object.user.id, 1, 'sets user id'
-    @equal object.user.email, 'mitch@rocketmade.com', 'sets user email'
-    @equal object.token, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk", "sets token"
-    @end()
+# ROCKAUTH.AUTHENTICATE_WITH_PASSWORD
 
 @test "rockauth.authenticate_with_password(opts) [pass]", ->
   @to()
@@ -125,4 +127,40 @@ browser.to()
       callback error
   @catch (error) ->
     @deepLooseEqual error, api.authentications.create.fail, 'json response'
+    @end()
+
+# ROCKAUTH.SIDELOAD
+
+@test "rockauth.sideload.load(basic)", ->
+  @evaluate ->
+    rockauth.sideload.load users: [{id: 1, email: "user@email.com"}]
+  @then (value) ->
+    @deepLooseEqual value, users: {1: {id: 1, email: "user@email.com"}}
+    @end()
+
+@test "rockauth.sideload.load(json)", ->
+  @evaluate (json) ->
+    rockauth.sideload.load json
+  , api.authentications.create.pass
+  @then (value) ->
+    @deepLooseEqual value,
+      authentications:
+        1:
+          id: 1,
+          token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIyNDAyMTIsImV4cCI6MTQ4Mzc3NjIxMiwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoiS1VYQ1dZQzNuNUJkemdPVkh3UW5LTXo3ckkyM1FJYlAifQ.rlq9gDcnz3ixmo3yYx05zAaIg_pR_ifFn-yvTg-NnnI',
+          token_id: 'KUXCWYC3n5BdzgOVHwQnKMz7rI23QIbP',
+          expiration: 1483776212,
+          client_version: null,
+          device_identifier: null,
+          device_os: null,
+          device_os_version: null,
+          device_description: null,
+          user_id: 1,
+          provider_authentication_id: null
+      users:
+        1:
+          id: 1,
+          email: 'mitch@rocketmade.com',
+          first_name: 'Mitch',
+          last_name: 'Thompson'
     @end()
