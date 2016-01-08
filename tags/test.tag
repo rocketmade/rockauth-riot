@@ -4,7 +4,7 @@ rockauth-test
   
   script
     :coffee-script
-      rockauth.url 'http://localhost:3011/api'
+      rockauth.url 'http://localhost:3010/api'
       rockauth.client_id 'jkmCq3jukIA16uQyAUVWkA'
       rockauth.client_secret 'rKrbQSqUWgWyMRXN2PJQeHDP0E3KzRJRAasKSoI2Yvw'
   

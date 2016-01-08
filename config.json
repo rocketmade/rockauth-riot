@@ -1,0 +1,7 @@
+{
+  "api": {
+    "url": "http://api",
+    "client_id": "client_id",
+    "client_secret": "client_secret"
+  }
+}

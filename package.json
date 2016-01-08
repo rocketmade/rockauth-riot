@@ -6,6 +6,7 @@
   "author": "Mitchel Thompson <mitch@rocketmade.com>",
   "license": "ISC",
   "devDependencies": {
+    "body-parser": "^1.14.2",
     "coffee-script": "^1.10.0",
     "express": "^4.13.3",
     "gulp": "^3.9.0",

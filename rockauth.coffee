@@ -8,38 +8,47 @@ class @rockauth
 
   @url: (value) ->
     if value
-      @data.set 'rockauth:url', value.replace(/\/$/, '')
-    @data.get 'rockauth:url'
+      @url.value = value.replace /\/$/, ''
+    @url.value
 
   @client_id: (value) ->
     if value
-      @data.set 'rockauth:client_id', value
-    @data.get 'rockauth:client_id'
+      @client_id.value = value
+    @client_id.value
 
   @client_secret: (value) ->
     if value
-      @data.set 'rockauth:client_secret', value
-    @data.get 'rockauth:client_secret'
+      @client_secret.value = value
+    @client_secret.value
 
-  @token: (value) ->
-    if value
-      @data.set 'rockauth:token', value
-    @data.get 'rockauth:token'
+  @authentication: (json) ->
+    @session json.authentications[0]
+    @user json.users[0]
+
+  @session: (json) ->
+    if json
+      @token json.token
+      @data.set 'rockauth:session', json
+    @data.get 'rockauth:session'
 
   @user: (value) ->
     if value
       @data.set 'rockauth:user', value
     @data.get 'rockauth:user'
 
-  @session: (value) ->
+  @token: (value) ->
     if value
-      @user value.user
-      @token value.token
-      @data.set 'rockauth:session', value
-    @data.get 'rockauth:session'
+      @data.set 'rockauth:token', value
+    @data.get 'rockauth:token'
+
+  @config: (json) =>
+    @url json.api.url
+    @client_id json.api.client_id
+    @client_secret json.api.client_secret
+    json
 
   @authenticate_with_password: (opts = {}) ->
-    new Promise (resolve, reject) =>
+    new rocketmade.promise (pass, fail) =>
       rocketmade.http.post "#{@url()}/authentications",
         authentication:
           auth_type: 'password'
@@ -47,7 +56,18 @@ class @rockauth
           client_secret: @client_secret()
           username: opts.email
           password: opts.password
-      .then (json) ->
-        resolve json.authentication
-      .catch (json) ->
-        reject email: "Invalid credentials."
+      .then (value) ->
+        rockauth.authentication value
+        pass value
+      .catch (error) ->
+        fail error
+
+  @sideload: new class
+    constructor: ->
+    load: (json) ->
+      for key, value of json
+        @set key, value...
+      @
+    set: (key, objects...) ->
+      for object in objects
+        (@[key] ?= {})[object.id] = object

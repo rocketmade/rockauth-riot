@@ -1,0 +1,8 @@
+{
+  "authentications": {
+    "create": {
+      "pass": {"authentications":[{"id":1,"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIyNDAyMTIsImV4cCI6MTQ4Mzc3NjIxMiwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoiS1VYQ1dZQzNuNUJkemdPVkh3UW5LTXo3ckkyM1FJYlAifQ.rlq9gDcnz3ixmo3yYx05zAaIg_pR_ifFn-yvTg-NnnI","token_id":"KUXCWYC3n5BdzgOVHwQnKMz7rI23QIbP","expiration":1483776212,"client_version":null,"device_identifier":null,"device_os":null,"device_os_version":null,"device_description":null,"user_id":1,"provider_authentication_id":null}],"users":[{"id":1,"email":"mitch@rocketmade.com","first_name":"Mitch","last_name":"Thompson"}],"meta":{"primary_resource_collection":"authentications","primary_resource_id":1}},
+      "fail": {"errors":[{"message":"Authentication failure.","statusCode":400,"validationErrors":{"resourceOwner":["can't be blank"]}}],"meta":{"primaryResourceCollection":"errors","primaryResourceId":70233718197820}}
+    }
+  }
+}

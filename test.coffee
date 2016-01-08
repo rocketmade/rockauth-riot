@@ -4,136 +4,178 @@ tape      = require 'tape'
 nightmare = require 'joseph/nightmare'
 browser   = nightmare()
 
+# MOCKS
+
+api    = require './api.json'
+config = require './config.json'
+
 # CONFIG
 
 tape.onFinish ->
   browser.end ->
 
+# LOGGING
+
+browser.on 'console', (type, args...) ->
+  console.log "<console>", args...
+
+browser.on 'page', ->
+  console.log "<page>", arguments...
+
 # CORE
 
-@ui = (label, code) ->
+@test = (label, code) ->
   tape label, (test) ->
-    scope =
-      test: (code) ->
-        browser.run (error, args...) ->
-          if error
-            test.fail error
-            test.end()
-            return
+    browser.then = (code) ->
+      browser.run (error, args...) ->
+        unless error
           code.call test, args...
-    for key, value of browser
-      scope[key] = value
-    code.call scope, test
+        else
+          test.fail error
+          test.end()
+    browser.catch = (code) ->
+      browser.run (error, args...) ->
+        if error then code.call test, error
+    code.call browser, test
+
+# HELPERS
 
 @helper = (name, code) ->
   browser[name] = code.bind browser
 
-# HELPERS
-
 @helper 'to', (path = '') ->
   @goto "http://localhost:3010#{path}"
 
+# LOAD
+
+browser.to()
+
 # ROCKAUTH
 
-@ui "rockauth.url(value)", ->
-  @to '/'
+@test "rockauth.url(value)", ->
   @evaluate ->
     rockauth.url 'http://url'
     rockauth.url()
-  @test (value) ->
+  @then (value) ->
     @equal value, 'http://url', 'set / get value'
     @end()
 
-@ui "rockauth.client_id(value)", ->
-  @to '/'
+@test "rockauth.client_id(value)", ->
   @evaluate ->
     rockauth.client_id 'identifier'
     rockauth.client_id()
-  @test (value) ->
+  @then (value) ->
     @equal value, 'identifier', 'set / get value'
     @end()
 
-@ui "rockauth.client_secret(value)", ->
-  @to '/'
+@test "rockauth.client_secret(value)", ->
   @evaluate ->
     rockauth.client_secret 'secret'
     rockauth.client_secret()
-  @test (value) ->
+  @then (value) ->
     @equal value, 'secret', 'set / get value'
     @end()
 
-@ui "rockauth.user(value)", ->
-  @to '/'
+@test 'rockauth.authentication(json)', ->
+  @evaluate (json) ->
+    rockauth.authentication json
+    session: rockauth.session(), user: rockauth.user(), token: rockauth.token()
+  , api.authentications.create.pass
+  @then (value) ->
+    @equal value.session.id, 1, 'sets session id'
+    @equal value.session.token_id, 'KUXCWYC3n5BdzgOVHwQnKMz7rI23QIbP', 'sets session token id'
+    @equal value.user.id, 1, 'sets user id'
+    @equal value.user.email, 'mitch@rocketmade.com', 'sets user email'
+    @equal value.token, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIyNDAyMTIsImV4cCI6MTQ4Mzc3NjIxMiwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoiS1VYQ1dZQzNuNUJkemdPVkh3UW5LTXo3ckkyM1FJYlAifQ.rlq9gDcnz3ixmo3yYx05zAaIg_pR_ifFn-yvTg-NnnI", "sets token"
+    @end()
+
+@test "rockauth.user(value)", ->
   @evaluate ->
     rockauth.user id: 1, email: "mitch@rocketmade.com"
     rockauth.user()
-  @test (value) ->
+  @then (value) ->
     @deepLooseEqual value, id: 1, email: "mitch@rocketmade.com", 'set / get value'
     @end()
 
-@ui "rockauth.token(value)", ->
-  @to '/'
+@test "rockauth.token(value)", ->
   @evaluate ->
     rockauth.token 'token'
     rockauth.token()
-  @test (value) ->
+  @then (value) ->
     @equal value, 'token', 'set / get value'
     @end()
 
-@ui "rockauth.session(value)", ->
-  @to '/'
-  @evaluate ->
-    rockauth.session JSON.parse '{\"id\":5,\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk\",\"token_id\":\"sWq17TyDKh99NrRuq4MvPyT/HRh31lBR\",\"expiration\":1483650310,\"client_version\":null,\"device_identifier\":null,\"device_os\":null,\"device_os_version\":null,\"device_description\":null,\"user\":{\"id\":1,\"email\":\"mitch@rocketmade.com\",\"first_name\":\"Mitch\",\"last_name\":\"Thompson\",\"provider_authentications\":[]},\"provider_authentication\":null}'
-    session: rockauth.session(), user: rockauth.user(), token: rockauth.token()
-  @test (object) ->
-    @equal object.session.id, 5, 'sets session id'
-    @equal object.session.token_id, 'sWq17TyDKh99NrRuq4MvPyT/HRh31lBR', 'sets session token id'
-    @equal object.session.expiration, 1483650310, 'sets session token id'
-    @equal object.user.id, 1, 'sets user id'
-    @equal object.user.email, 'mitch@rocketmade.com', 'sets user email'
-    @equal object.token, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIxMTQzMTAsImV4cCI6MTQ4MzY1MDMxMCwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoic1dxMTdUeURLaDk5TnJSdXE0TXZQeVQvSFJoMzFsQlIifQ.ihRqi8bIF7ZIUaFbP4RG0xcWuzayFw4GLDa9mK2d9Mk", "sets token"
+@test "rockauth.config(json)", ->
+  @refresh()
+  @evaluate (json) ->
+    rockauth.config json
+    url: rockauth.url(), client_id: rockauth.client_id(), client_secret: rockauth.client_secret()
+  , config
+  @then (value) ->
+    @deepLooseEqual value,
+      url: 'http://api',
+      client_id: 'client_id'
+      client_secret: 'client_secret',
+      'sets correct values'
     @end()
 
-@ui "setup", ->
+# ROCKAUTH.AUTHENTICATE_WITH_PASSWORD
+
+@test "rockauth.authenticate_with_password(opts) [pass]", ->
   @to()
-  @test ->
-    @end()
-
-@ui "rockauth.authenticate_with_password(opts) [pass]", (test) ->
   @evaluate (callback) ->
     rockauth.authenticate_with_password
       email: "mitch@rocketmade.com"
       password: "password"
     .then (data) ->
       callback null, data
-  .then (json) ->
-    user = json.user
-    test.ok json.token, 'token ok'
-    test.ok json.expiration, 'expiration ok'
-    test.equal user.id, 1, 'user id correct'
-    test.equal user.email, "mitch@rocketmade.com", 'email correct'
-    test.equal user.first_name, "Mitch", 'user first name correct'
-    test.equal user.last_name, "Thompson", 'user last name correct'
-    test.end()
+  @then (json) ->
+    @deepLooseEqual json, api.authentications.create.pass, 'json response'
+    @end()
 
-@ui "rockauth.authenticate_with_password(opts) [fail no email]", (test) ->
-  @evaluate (callback) ->
-    rockauth.authenticate_with_password
-      email: "bad@rocketmade.com"
-      password: "password"
-    .catch (error) ->
-      callback error
-  .then null, (errors) ->
-    test.deepLooseEqual errors, email: "Invalid credentials.", 'password error message'
-    test.end()
-
-@ui "rockauth.authenticate_with_password(opts) [fail wrong password]", (test) ->
+@test "rockauth.authenticate_with_password(opts) [fail]", ->
   @evaluate (callback) ->
     rockauth.authenticate_with_password
       email: "mitch@rocketmade.com"
       password: "bad"
     .catch (error) ->
       callback error
-  .then null, (errors) ->
-    test.deepLooseEqual errors, email: "Invalid credentials.", 'password error message'
-    test.end()
+  @catch (error) ->
+    @deepLooseEqual error, api.authentications.create.fail, 'json response'
+    @end()
+
+# ROCKAUTH.SIDELOAD
+
+@test "rockauth.sideload.load(basic)", ->
+  @evaluate ->
+    rockauth.sideload.load users: [{id: 1, email: "user@email.com"}]
+  @then (value) ->
+    @deepLooseEqual value, users: {1: {id: 1, email: "user@email.com"}}
+    @end()
+
+@test "rockauth.sideload.load(json)", ->
+  @evaluate (json) ->
+    rockauth.sideload.load json
+  , api.authentications.create.pass
+  @then (value) ->
+    @deepLooseEqual value,
+      authentications:
+        1:
+          id: 1,
+          token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE0NTIyNDAyMTIsImV4cCI6MTQ4Mzc3NjIxMiwiYXVkIjoiamttQ3EzanVrSUExNnVReUFVVldrQSIsInN1YiI6MSwianRpIjoiS1VYQ1dZQzNuNUJkemdPVkh3UW5LTXo3ckkyM1FJYlAifQ.rlq9gDcnz3ixmo3yYx05zAaIg_pR_ifFn-yvTg-NnnI',
+          token_id: 'KUXCWYC3n5BdzgOVHwQnKMz7rI23QIbP',
+          expiration: 1483776212,
+          client_version: null,
+          device_identifier: null,
+          device_os: null,
+          device_os_version: null,
+          device_description: null,
+          user_id: 1,
+          provider_authentication_id: null
+      users:
+        1:
+          id: 1,
+          email: 'mitch@rocketmade.com',
+          first_name: 'Mitch',
+          last_name: 'Thompson'
+    @end()
