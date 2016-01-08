@@ -1,5 +1,5 @@
 (function() {
-  var api, browser, nightmare, tape,
+  var api, browser, config, nightmare, tape,
     slice = [].slice;
 
   tape = require('tape');
@@ -9,6 +9,8 @@
   browser = nightmare();
 
   api = require('./api.json');
+
+  config = require('./config.json');
 
   tape.onFinish(function() {
     return browser.end(function() {});
@@ -140,6 +142,26 @@
     });
     return this.then(function(value) {
       this.equal(value, 'token', 'set / get value');
+      return this.end();
+    });
+  });
+
+  this.test("rockauth.config(json)", function() {
+    this.refresh();
+    this.evaluate(function(json) {
+      rockauth.config(json);
+      return {
+        url: rockauth.url(),
+        client_id: rockauth.client_id(),
+        client_secret: rockauth.client_secret()
+      };
+    }, config);
+    return this.then(function(value) {
+      this.deepLooseEqual(value, {
+        url: 'http://api',
+        client_id: 'client_id',
+        client_secret: 'client_secret'
+      }, 'sets correct values');
       return this.end();
     });
   });

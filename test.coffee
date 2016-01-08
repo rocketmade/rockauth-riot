@@ -6,7 +6,8 @@ browser   = nightmare()
 
 # MOCKS
 
-api = require './api.json'
+api    = require './api.json'
+config = require './config.json'
 
 # CONFIG
 
@@ -102,6 +103,20 @@ browser.to()
     rockauth.token()
   @then (value) ->
     @equal value, 'token', 'set / get value'
+    @end()
+
+@test "rockauth.config(json)", ->
+  @refresh()
+  @evaluate (json) ->
+    rockauth.config json
+    url: rockauth.url(), client_id: rockauth.client_id(), client_secret: rockauth.client_secret()
+  , config
+  @then (value) ->
+    @deepLooseEqual value,
+      url: 'http://api',
+      client_id: 'client_id'
+      client_secret: 'client_secret',
+      'sets correct values'
     @end()
 
 # ROCKAUTH.AUTHENTICATE_WITH_PASSWORD

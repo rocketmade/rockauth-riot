@@ -41,6 +41,12 @@ class @rockauth
       @data.set 'rockauth:token', value
     @data.get 'rockauth:token'
 
+  @config: (json) =>
+    @url json.api.url
+    @client_id json.api.client_id
+    @client_secret json.api.client_secret
+    json
+
   @authenticate_with_password: (opts = {}) ->
     new rocketmade.promise (pass, fail) =>
       rocketmade.http.post "#{@url()}/authentications",
