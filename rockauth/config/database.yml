@@ -1,5 +1,0 @@
-test:
-  adapter: postgresql
-  encoding: unicode
-  database: rockauth_riot_test
-  pool: 5

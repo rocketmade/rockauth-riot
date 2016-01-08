@@ -39,15 +39,10 @@ class @rockauth
     @data.get 'rockauth:session'
 
   @authenticate_with_password: (opts = {}) ->
-    new Promise (resolve, reject) =>
-      rocketmade.http.post "#{@url()}/authentications",
-        authentication:
-          auth_type: 'password'
-          client_id: @client_id()
-          client_secret: @client_secret()
-          username: opts.email
-          password: opts.password
-      .then (json) ->
-        resolve json.authentication
-      .catch (json) ->
-        reject email: "Invalid credentials."
+    rocketmade.http.post "#{@url()}/authentications",
+      authentication:
+        auth_type: 'password'
+        client_id: @client_id()
+        client_secret: @client_secret()
+        username: opts.email
+        password: opts.password
