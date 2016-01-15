@@ -10,12 +10,12 @@ rockauth-reset-password
         # TODO: find a way to move this validation to the form or input tags
         if data.password == data.confirm_password
           rockauth.reset_password { reset_token: riot.route.query().token, new_password: data.password }
-            .then (flash) ->
-              alert flash
+            .then (flash) =>
+              console.log flash
               rockauth.trigger "#{@name}:success"
-            .catch (flash) ->
-              console.log "TODO: password reset failure. do something..."
-              alert flash
+            .catch (flash) =>
+              # TODO: show these flashes
+              console.log flash
               rockauth.trigger "#{@name}:failure"
         else
           rocketmade.trigger "#{@name}:errors", { confirm_password: "Passwords must match." }
