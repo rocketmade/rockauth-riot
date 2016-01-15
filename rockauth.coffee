@@ -62,6 +62,17 @@ class @rockauth
       .catch (error) ->
         fail error
 
+  @reset_password: (opts = {}) ->
+    new rocketmade.promise (pass, fail) =>
+      rocketmade.http.post "#{@url()}/passwords/reset",
+        user:
+          password_reset_token: opts.reset_token
+          password: opts.new_password  
+      .then (value) ->
+        pass value
+      .catch (error) ->
+        fail error
+            
   @sideload: new class
     constructor: ->
     load: (json) ->
