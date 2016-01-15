@@ -9,11 +9,12 @@ rockauth-login
 
       rocketmade.on "#{@name}:submit", (data) =>
         rockauth.authenticate_with_password data
-          .then (json) => rockauth.trigger "#{@name}:pass", json
-          .catch (json) => rockauth.trigger "#{@name}:fail", json
+          .then (response) => rockauth.trigger "#{@name}:pass", response
+          .catch (response) => rockauth.trigger "#{@name}:fail", response
 
-      rockauth.on "#{@name}:fail", (errors) =>
-        rocketmade.trigger "#{@name}:errors", errors
+      rockauth.on "#{@name}:fail", (response) =>
+        console.log response.flash()
+        rocketmade.trigger "#{@name}:errors", response.validation_errors()
 
       rocketmade.on "forgot-password:clicked", =>
         rockauth.trigger "#{@name}:forgot-password"
