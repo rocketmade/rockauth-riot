@@ -1,27 +1,35 @@
-rockauth-reset_password
-  
+rockauth-reset-password
+
   // JS
+
   script
     :coffee-script
-      @name = @opts.name or "rockauth:reset_password"
-      
+      @name = @opts.name or "reset-password"
+
       rocketmade.on "#{@name}:submit", (data) =>
+        # TODO: find a way to move this validation to the form or input tags
         if data.password == data.confirm_password
-          console.log "Passwords match!"
-          
-          rockauth.reset_password({
-            reset_token: null,
-            new_password: null
-          })
+          rockauth.reset_password { reset_token: riot.route.query().token, new_password: data.password }
+            .then (flash) ->
+              alert flash
+              rockauth.trigger "#{@name}:success"
+            .catch (flash) ->
+              console.log "TODO: password reset failure. do something..."
+              alert flash
+              rockauth.trigger "#{@name}:failure"
+        else
+          rocketmade.trigger "#{@name}:errors", { confirm_password: "Passwords must match." }
 
   // HTML
+
   rocketmade-center
     rocketmade-form(name="{parent.name}")
       rocketmade-input(name="password", type="password", placeholder="Password", require)
       rocketmade-input(name="confirm_password", type="password", placeholder="Confirm Password", require)
       rocketmade-submit(label="Change Password")
-  
+
   // CSS
+
   style(scoped)
     :stylus
       rocketmade-form

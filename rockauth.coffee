@@ -78,12 +78,12 @@ class @rockauth
       rocketmade.http.post "#{@url()}/passwords/reset",
         user:
           password_reset_token: opts.reset_token
-          password: opts.new_password  
+          password: opts.new_password
       .then (value) ->
-        pass value
+        pass value.meta.message
       .catch (error) ->
-        fail error
-            
+        fail error.error.message
+
   @sideload: new class
     constructor: ->
     load: (json) ->
