@@ -9,15 +9,15 @@ rockauth-forgot-password
       rocketmade.on "#{@name}:submit", (data) =>
         # display a nicer toast/flash for results
         rockauth.forgot_password data.email
-          .then (flash) =>
-            alert flash
-            rockauth.trigger "#{@name}:pass", json
-          .catch (flash) =>
-            alert flash
-            rockauth.trigger "#{@name}:fail", json
+          .then (response) =>
+            console.log response.flash()
+            rockauth.trigger "#{@name}:pass", response
+          .catch (response) =>
+            console.log response.flash()
+            rockauth.trigger "#{@name}:fail", response
 
-      rockauth.on "#{@name}:fail", (errors) =>
-        rocketmade.trigger "#{@name}:errors", errors
+      rockauth.on "#{@name}:fail", (response) =>
+        rocketmade.trigger "#{@name}:errors", response.validation_errors()
 
   //- HTML
 

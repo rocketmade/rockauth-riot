@@ -53,10 +53,10 @@ class @rockauth
       rocketmade.http.post "#{@url()}/passwords/forgot",
         user:
           username: username
-      .then (value) ->
-        pass value.meta.message
-      .catch (error) ->
-        fail error.error.message
+      .then (response) ->
+        pass response
+      .catch (response) ->
+        fail response
 
   @authenticate_with_password: (opts = {}) ->
     new rocketmade.promise (pass, fail) =>
@@ -65,13 +65,13 @@ class @rockauth
           auth_type: 'password'
           client_id: @client_id()
           client_secret: @client_secret()
-          username: opts.email
+          username: opts.username
           password: opts.password
-      .then (value) ->
-        rockauth.authentication value
-        pass value
-      .catch (error) ->
-        fail error
+      .then (response) ->
+        rockauth.authentication response.json()
+        pass response
+      .catch (response) ->
+        fail response
 
   @reset_password: (opts = {}) ->
     new rocketmade.promise (pass, fail) =>
@@ -79,10 +79,10 @@ class @rockauth
         user:
           password_reset_token: opts.reset_token
           password: opts.new_password
-      .then (value) ->
-        pass value.meta.message
-      .catch (error) ->
-        fail error.error.message
+      .then (response) ->
+        pass response
+      .catch (response) ->
+        fail response
 
   @sideload: new class
     constructor: ->
