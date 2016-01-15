@@ -47,6 +47,17 @@ class @rockauth
     @client_secret json.api.client_secret
     json
 
+  @forgot_password: (username) ->
+    # TODO: find a better place/way to parse and show flash messages
+    new rocketmade.promise (pass, fail) =>
+      rocketmade.http.post "#{@url()}/passwords/forgot",
+        user:
+          username: username
+      .then (value) ->
+        pass value.meta.message
+      .catch (error) ->
+        fail error.error.message
+
   @authenticate_with_password: (opts = {}) ->
     new rocketmade.promise (pass, fail) =>
       rocketmade.http.post "#{@url()}/authentications",
