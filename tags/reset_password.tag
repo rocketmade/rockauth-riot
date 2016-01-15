@@ -15,7 +15,6 @@ rockauth-reset_password
           })
 
   // HTML
-  p { message }
   rocketmade-center
     rocketmade-form(name="{parent.name}")
       rocketmade-input(name="password", type="password", placeholder="Password", require)
