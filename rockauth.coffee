@@ -47,6 +47,25 @@ class @rockauth
     @client_secret json.api.client_secret
     json
 
+  @is_authenticated: ->
+    # TODO: check to see if token is expired
+    @token() != null and @token() != undefined
+
+  @logout: ->
+    # call the DELETE authentications endpoint on the api
+    @authenticated_request "DELETE", "/authentications"
+    .then (response) ->
+      console.log "DELETE /authentications endpoint returned success"
+    .catch (response) ->
+      console.log "DELETE /authentications endpoint returned failure"
+
+    @data.set 'rockauth:token', null
+
+  @authenticated_request: (method, endpoint, data) ->
+    rocketmade.http.request method, "#{@url()}#{endpoint}", data,
+      headers:
+        Authorization: "bearer #{@token()}"
+
   @forgot_password: (username) ->
     # TODO: find a better place/way to parse and show flash messages
     new rocketmade.promise (pass, fail) =>
