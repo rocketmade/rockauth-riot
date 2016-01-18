@@ -42,9 +42,9 @@ class @rockauth
     @data.get 'rockauth:token'
 
   @config: (json) =>
-    @url json.api.url
-    @client_id json.api.client_id
-    @client_secret json.api.client_secret
+    @url json.url
+    @client_id json.client_id
+    @client_secret json.client_secret
     json
 
   @is_authenticated: ->
