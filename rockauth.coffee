@@ -21,15 +21,11 @@ class @rockauth
       @client_secret.value = value
     @client_secret.value
 
-  @authentication: (json) ->
-    @session json.authentications[0]
-    @user json.users[0]
-
-  @session: (json) ->
-    if json
-      @token json.token
-      @data.set 'rockauth:session', json
-    @data.get 'rockauth:session'
+  @authentication: (value) ->
+    if value
+      @data.set 'rockauth:authentication', value
+      rockauth.token value.token
+    @data.get 'rockauth:authentication'
 
   @user: (value) ->
     if value
@@ -87,8 +83,17 @@ class @rockauth
           username: opts.username
           password: opts.password
       .then (response) ->
-        rockauth.authentication response.json()
+        # get and store the authentication
+        rockauth.authentication response.json().authentications[0]
+
+        # get the name/key of the users model to retreive the user
+        users_key = rockauth.authentication().resourceOwnerCollection
+
+        # store the user
+        rockauth.user response.json()[users_key][0]
+
         pass response
+
       .catch (response) ->
         fail response
 
