@@ -1,24 +1,27 @@
-rockauth-forgot-password
+<rockauth-forgot-password>
+  <script>
+    (function() {
+      this.name = this.opts.name || "forgot-password";
 
-  //- JS
+      rocketmade.on(this.name + ":submit", (function(_this) {
+        return function(data) {
+          return rockauth.forgot_password(data.email).then(function(response) {
+            console.log(response.flash());
+            return rockauth.trigger(_this.name + ":pass", response);
+          })["catch"](function(response) {
+            console.log(response.flash());
+            return rockauth.trigger(_this.name + ":fail", response);
+          });
+        };
+      })(this));
 
-  script
-    :coffee-script
-      @name = @opts.name or "forgot-password"
+      rockauth.on(this.name + ":fail", (function(_this) {
+        return function(response) {
+          return rocketmade.trigger(_this.name + ":errors", response.validation_errors());
+        };
+      })(this));
 
-      rocketmade.on "#{@name}:submit", (data) =>
-        # display a nicer toast/flash for results
-        rockauth.forgot_password data.email
-          .then (response) =>
-            console.log response.flash()
-            rockauth.trigger "#{@name}:pass", response
-          .catch (response) =>
-            console.log response.flash()
-            rockauth.trigger "#{@name}:fail", response
-
-      rockauth.on "#{@name}:fail", (response) =>
-        rocketmade.trigger "#{@name}:errors", response.validation_errors()
-
-  //- HTML
-
-  rocketmade-forgot-password(name="{ name }")
+    }).call(this);
+  </script>
+  <rocketmade-forgot-password name="{ name }"></rocketmade-forgot-password>
+</rockauth-forgot-password>

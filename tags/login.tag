@@ -1,24 +1,34 @@
-rockauth-login
+<rockauth-login>
+  <script>
+    (function() {
+      this.name = this.opts.name || "rockauth:login";
 
-  //- JS
+      this.show_forgot = this.opts.show_forgot === "" || this.opts.show_forgot || false;
 
-  script
-    :coffee-script
-      @name = @opts.name or "rockauth:login"
-      @show_forgot = @opts.show_forgot == "" or @opts.show_forgot or false
+      rocketmade.on(this.name + ":submit", (function(_this) {
+        return function(data) {
+          return rockauth.authenticate_with_password(data).then(function(response) {
+            return rockauth.trigger(_this.name + ":pass", response);
+          })["catch"](function(response) {
+            return rockauth.trigger(_this.name + ":fail", response);
+          });
+        };
+      })(this));
 
-      rocketmade.on "#{@name}:submit", (data) =>
-        rockauth.authenticate_with_password data
-          .then (response) => rockauth.trigger "#{@name}:pass", response
-          .catch (response) => rockauth.trigger "#{@name}:fail", response
+      rockauth.on(this.name + ":fail", (function(_this) {
+        return function(response) {
+          console.log(response.flash());
+          return rocketmade.trigger(_this.name + ":errors", response.validation_errors());
+        };
+      })(this));
 
-      rockauth.on "#{@name}:fail", (response) =>
-        console.log response.flash()
-        rocketmade.trigger "#{@name}:errors", response.validation_errors()
+      rocketmade.on("forgot-password:clicked", (function(_this) {
+        return function() {
+          return rockauth.trigger(_this.name + ":forgot-password");
+        };
+      })(this));
 
-      rocketmade.on "forgot-password:clicked", =>
-        rockauth.trigger "#{@name}:forgot-password"
-
-  //- HTML
-
-  rocketmade-login(name="{name}", show_forgot="{ show_forgot }")
+    }).call(this);
+  </script>
+  <rocketmade-login name="{name}" show_forgot="{ show_forgot }"></rocketmade-login>
+</rockauth-login>
