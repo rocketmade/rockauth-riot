@@ -2,7 +2,7 @@
   "name": "rockauth-riot",
   "version": "1.0.0",
   "description": "",
-  "main": "rockauth.js",
+  "main": "dist/rockauth.js",
   "author": "Mitchel Thompson <mitch@rocketmade.com>",
   "license": "ISC",
   "devDependencies": {
