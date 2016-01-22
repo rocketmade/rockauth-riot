@@ -29,8 +29,8 @@
   },
   "scripts": {
     "test": "node test/test.js",
-    "clean": "rm -rf dist && mkdir -p dist",
-    "build": "npm run clean && riot tags dist/tags.js && cat src/rockauth.js > dist/rockauth.js"
+    "clean": "rm -rf build && mkdir -p build",
+    "build": "npm run clean && riot tags build/tags.js && cat src/rock-auth.js > build/rock-auth.js"
   },
   "repository": {
     "type": "git",
@@ -39,5 +39,9 @@
   "bugs": {
     "url": "https://github.com/rocketmade/rockauth-riot/issues"
   },
-  "homepage": "https://github.com/rocketmade/rockauth-riot#readme"
+  "homepage": "https://github.com/rocketmade/rockauth-riot#readme",
+  "dependencies": {
+    "putainde-localstorage": "^4.0.0",
+    "stampit": "^2.1.1"
+  }
 }
