@@ -21,21 +21,52 @@ class @rockauth
       @client_secret.value = value
     @client_secret.value
 
+  @domain: ->
+    return @domain.value if @domain.value
+
+    # TODO: this won't work for website.co.uk type domains
+    parts = document.domain.split '.'
+    while parts.length > 2
+      parts.shift()
+
+    @domain.value = "#{parts[0]}.#{parts[1]}"
+
+  # TODO: encrypt these
+  @set_cookie: (name, value, days_to_live = 30) ->
+    return @delete_cookie(name) if value == null
+
+    d = new Date
+    d.setTime d.getTime() + days_to_live*24*60*60*1000
+    expires = "expires=#{d.toUTCString()}"
+    domain = "domain=.#{@domain()}"
+    document.cookie = "#{name}=#{JSON.stringify(value)}; #{expires}; #{domain}; path=/"
+
+  @get_cookie: (name) ->
+    cookies = document.cookie.split ';'
+    for index, cookie of cookies
+      key_val = cookie.trim().split '='
+      return JSON.parse(key_val[1]) if key_val[0] == name
+    null
+
+  @delete_cookie: (name) ->
+    document.cookie = "#{name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.#{@domain()}";
+
   @authentication: (value) ->
     if value
-      @data.set 'rockauth:authentication', value
+      document.cookie = rockauth
+      @set_cookie 'rockauth:authentication', value
       rockauth.token value.token
     @data.get 'rockauth:authentication'
 
   @user: (value) ->
     if value
-      @data.set 'rockauth:user', value
-    @data.get 'rockauth:user'
+      @set_cookie 'rockauth:user', value
+    @get_cookie 'rockauth:user'
 
   @token: (value) ->
     if value
-      @data.set 'rockauth:token', value
-    @data.get 'rockauth:token'
+      @set_cookie 'rockauth:token', value
+    @get_cookie 'rockauth:token'
 
   @config: (json) =>
     @url json.url
@@ -55,7 +86,7 @@ class @rockauth
     .catch (response) ->
       console.log "DELETE /authentications endpoint returned failure"
 
-    @data.set 'rockauth:token', null
+    @delete_cookie 'rockauth:token'
 
   @authenticated_request: (method, endpoint, data) ->
     rocketmade.http.request method, "#{@url()}#{endpoint}", data,
