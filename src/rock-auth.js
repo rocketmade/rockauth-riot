@@ -1,9 +1,8 @@
 'use strict';
 
 import stampit from 'stampit'
-import localStore from 'putainde-localstorage'
-import httpClient from 'somewherehttpclient'
-
+import httpClient from '@rocketmade/rock-http-client'
+import cookies from 'cookies-js'
 
 /**
  * @param {String} url

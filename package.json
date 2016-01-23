@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/rocketmade/rockauth-riot#readme",
   "dependencies": {
-    "putainde-localstorage": "^4.0.0",
+    "cookies-js": "^1.2.2",
     "stampit": "^2.1.1"
   }
 }
