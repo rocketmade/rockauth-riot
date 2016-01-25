@@ -39,6 +39,7 @@
   "dependencies": {
     "cookies-js": "^1.2.2",
     "stampit": "^2.1.1",
-    "@rocketmade/rock-http-client": "^0.1.0"
+    "@rocketmade/rock-http-client": "^0.1.0",
+    "@rocketmade/rocketmade-riot": "^0.1.2",
   }
 }
