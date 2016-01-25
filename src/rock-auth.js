@@ -4,6 +4,33 @@ import stampit from 'stampit'
 import httpClient from '@rocketmade/rock-http-client'
 import cookies from 'cookies-js'
 
+export default cookieStrategy = stampit()
+.init(function(){
+    let storage = cookies(window)
+    let domain
+    /* http://jsfiddle.net/zEwsP/4/ */
+    this.get = (key) => {
+        return storage.get(key)
+    }
+    this.set = (key, value) => {
+        return storage.set(key, value)
+    }
+    this.expire = (key) => {
+        return storage.expire(key)
+    }
+})
+export default localStorageStrategy = stampit()
+.init(function(){
+    this.get = (key) => {
+
+    }
+    this.set = (key, value) => {
+
+    }
+    this.expire = (key) => {
+
+    }
+})
 /**
  * @param {String} url
  * @param {String} clientId
@@ -14,7 +41,11 @@ export default stampit()
     let rootUrl = (this.url || this.rootUrl)
     let clientId = this.clientId
     let clientSecret = this.clientSecret
-    let storage = localStore.create({ namespace: 'rockauth:'})
+    let storage = (this.cookies ? cookieStrategy() : localStorageStrategy())
+
+    const namespaced = (key) => {
+        return `rockauth:${key}`
+    }
 
     const buildUrl = (path) => {
         return `${rootUrl}${path}`
@@ -24,22 +55,22 @@ export default stampit()
 
     this.authentication = (value) => {
         if(value) {
-            storage.set('authentication',value)
+            storage.set(namespaced('authentication'),value)
             this.token(value.token)
         }
-        return storage.get('authentication')
+        return storage.get(namespaced('authentication'))
     }
     this.user = (value) => {
         if(value) {
-            storage.set('user', value)
+            storage.set(namespaced('user', value))
         }
-        return storage.get('user')
+        return storage.get(namespaced('user'))
     }
     this.token = (value) => {
         if(value) {
-            storage.set('token',value)
+            storage.set(namespaced('token'),value)
         }
-        return storage.get('token')
+        return storage.get(namespaced('token'))
     }
     this.isAuthenticated = () => {
         return !!this.token()
@@ -55,7 +86,7 @@ export default stampit()
         return this.secureResource(buildUrl('/authentications'))
         .delete()
         .then((res) => {
-            this.storage.set('token',null)
+            this.storage.expire(namespaced('token'))
             return res
         })
 
